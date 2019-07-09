@@ -185,7 +185,7 @@ public class HistoricalPricingEventsRequestor {
 	    public static String getAccessToken() throws Exception{
 	    	sslsf = new SSLConnectionSocketFactory(new SSLContextBuilder().build());
 	    	httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
-	    	return EDPToken.getToken(httpclient, username, clientId);
+	    	return EDPToken.getToken(username, clientId,httpclient);
 	    }
 	    
 		public static void main(String[] args) {
@@ -271,4 +271,3 @@ public class HistoricalPricingEventsRequestor {
 		}
 
 }
-
