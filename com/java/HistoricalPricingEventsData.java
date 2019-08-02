@@ -1,12 +1,11 @@
 package com.java;
 
-import java.util.HashMap;
 import java.util.Vector;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 //Jackson
 import com.fasterxml.jackson.annotation.*;
-//The following fields/properies in historical pricing event are ignored
+//The following fields/properties in historical pricing event are ignored
 @JsonIgnoreProperties(value = {
 	    "universe",
 	    "adjustments",
@@ -14,30 +13,32 @@ import com.fasterxml.jackson.annotation.*;
 	    "qos",
 	    "meta",
 	    "status",
-	    "summaryTimestampLabel",
-	    "interval"
+	    "summaryTimestampLabel"
 	})
 
 public class HistoricalPricingEventsData {
-	//the map keeping name and type of all fields
+	//the map keeps all "name" and "type" got from JSON objects in the "headers" field
 	private LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>();
-	//the vector keeping the data of all events
+	//the vector keeps the array of all data events in the "data" field 
 	private Vector<Vector<Object>> dataJson = new Vector<Vector<Object>>();
-	//deserialize headers fields into the map
-    @JsonProperty("headers")
-	private void unpackMultipleJsonObjects(Vector<HashMap<String, Object>> headersJson) {
-    	Iterator<HashMap<String, Object>> fieldList = headersJson.iterator(); 
+	//Add only all "name" and "type" got from JSON objects in the "headers" field into the map
+	//key is "name" and the value is "type"
+	@JsonProperty("headers")
+	private void unpackMultipleJsonObjects(Vector<LinkedHashMap<String, Object>> headersJson) {
+    	Iterator<LinkedHashMap<String, Object>> fieldList = headersJson.iterator(); 
     	while (fieldList.hasNext()) { 
-    		HashMap<String, Object> afield = (HashMap<String, Object>)fieldList.next();
+    		LinkedHashMap<String, Object> afield = (LinkedHashMap<String, Object>)fieldList.next();
             headers.put(afield.get("name").toString(), afield.get("type").toString());
         } 
 	}
-  //get deserialized headers map
+	//Get headers which is the map of "name" and "type"
     public LinkedHashMap<String, String> getHeaders() {
     	return headers;
     }
-    //deserialize all events in data field into a vector of vector
-  	//return the vector
+    //Map the array of all data events from the "data" field to vector of vector
+    //internal vector keeps all values of an event e.g. "2019-07-08T02:55:01.303000000Z","trade",62094,...
+    //external vector keeps all events
+    //Return the vector of data events 
     @JsonProperty("data")
     public Vector<Vector<Object>>  getData() {
     	return dataJson;
