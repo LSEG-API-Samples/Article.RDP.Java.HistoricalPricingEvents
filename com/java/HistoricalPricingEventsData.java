@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 //Jackson
 import com.fasterxml.jackson.annotation.*;
-//The following fields/properties in historical pricing event are ignored
+//The following value/properties in historical pricing event are ignored
 @JsonIgnoreProperties(value = {
 	    "universe",
 	    "adjustments",
@@ -17,25 +17,25 @@ import com.fasterxml.jackson.annotation.*;
 	})
 
 public class HistoricalPricingEventsData {
-	//the map keeps all "name" and "type" got from JSON objects in the "headers" field
+	//the map keeps all "name" and "type" got from JSON objects in the "headers" value
 	private LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>();
-	//the vector keeps the array of all data events in the "data" field 
+	//the vector keeps the array of all data events in the "data" value 
 	private Vector<Vector<Object>> dataJson = new Vector<Vector<Object>>();
-	//Add only all "name" and "type" got from JSON objects in the "headers" field into the map
+	//Add only all "name" and "type" got from JSON objects in the "headers" value into the map
 	//key is "name" and the value is "type"
 	@JsonProperty("headers")
 	private void unpackMultipleJsonObjects(Vector<LinkedHashMap<String, Object>> headersJson) {
-    	Iterator<LinkedHashMap<String, Object>> fieldList = headersJson.iterator(); 
-    	while (fieldList.hasNext()) { 
-    		LinkedHashMap<String, Object> afield = (LinkedHashMap<String, Object>)fieldList.next();
-            headers.put(afield.get("name").toString(), afield.get("type").toString());
+    	Iterator<LinkedHashMap<String, Object>> valueList = headersJson.iterator(); 
+    	while (valueList.hasNext()) { 
+    		LinkedHashMap<String, Object> avalue = (LinkedHashMap<String, Object>)valueList.next();
+            headers.put(avalue.get("name").toString(), avalue.get("type").toString());
         } 
 	}
 	//Get headers which is the map of "name" and "type"
     public LinkedHashMap<String, String> getHeaders() {
     	return headers;
     }
-    //Map the array of all data events from the "data" field to vector of vector
+    //Map the array of all data events from the "data" value to vector of vector
     //internal vector keeps all values of an event e.g. "2019-07-08T02:55:01.303000000Z","trade",62094,...
     //external vector keeps all events
     //Return the vector of data events 
