@@ -5,8 +5,11 @@ import java.util.Calendar;
 import java.util.Vector;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.List;
+
 //Commons CLI 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -22,10 +25,14 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 //JSON in java 
 import org.json.JSONObject;
 //Jackson
 import com.fasterxml.jackson.databind.*;
+//Java objects mapped to JSON schema
+import com.java.response.HistoricalPricingEvent;
+import com.java.response.Header;
 
 public class HistoricalPricingEventsRequestor {
 	
@@ -42,7 +49,7 @@ public class HistoricalPricingEventsRequestor {
     private static String endDateTime;
     private static LinkedHashSet<String> adjustmentsSet;
     private static String count;
-    private static boolean singleEvent;
+    //private static boolean singleEvent;
     //The version of Historical Pricing Events specified in the end point REST API
     private static String HISTORICAL_PRICING_VERSION = "v1";
     //The data file name of a RIC
@@ -69,8 +76,6 @@ public class HistoricalPricingEventsRequestor {
 			options.addOption(adjustmentsOption);
 			Option countOption = Option.builder("count").hasArg(true).argName("COUNT").required(false).desc("limit the maximum number of data points that will be returned (this does not apply to the historical pricing single-event call).").build();
 			options.addOption(countOption);
-			Option singleOption = Option.builder("single").hasArg(false).required(false).desc("Request the historical pricing single-event.").build();
-			options.addOption(singleOption);
 			//check if prints help when no argument or the first argument is -help
 			if(args.length==0 || args[0].equalsIgnoreCase("-help")) {
 				HelpFormatter formatter = new HelpFormatter();
@@ -97,8 +102,6 @@ public class HistoricalPricingEventsRequestor {
 				adjustmentsSet =  new LinkedHashSet<String>(Arrays.asList(cmd.getOptionValue("adjustments").split(","))); 
 			}
 			count = cmd.getOptionValue("count");
-			singleEvent = cmd.hasOption("single");
-			
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
 			HelpFormatter formatter = new HelpFormatter();
@@ -106,7 +109,7 @@ public class HistoricalPricingEventsRequestor {
 			System.exit(0);
 		}
     }
-
+    
     public static void requestHistoricalEvent(String aRIC, String url, String access_token) throws Exception{
     	//Request data
     	HttpGet httpreq = new HttpGet(url);
@@ -115,72 +118,74 @@ public class HistoricalPricingEventsRequestor {
 		HttpResponse response = httpclient.execute(httpreq);
 		//Check if getting data successfully or not. If fails, print error then exit from the method
 		if(!Utils.isSuccessRequestPrnError(response, "Request data failed:")) 
-			return;
-		//Remove '[' and ']' from the message
+			return; 
+		//Get the response which is in the first index of JSON Array
 		String jsonMsg = EntityUtils.toString(response.getEntity());
-		String jsonTmp = jsonMsg.substring(1);
-		String jsonResp = jsonTmp.substring(0, jsonTmp.length() - 1);
-		//The response contains data and status means request is successful but may have the warning
-		//The response contains status only is request failed e.g. RIC is not found so exit from the method
-		if(jsonResp.contains("\"status\"") && !jsonResp.contains("\"data\"") ) {
-			JSONObject json = new JSONObject(jsonResp);
-			System.out.println("Request data failed:");
-			System.out.println(json.toString(4));
-			return;
-		}
+		JSONArray jsonArray = new JSONArray(jsonMsg);
+		String jsonResp = jsonArray.get(0).toString();
+		//print the response HTTP code 200
+		//System.out.println(jsonResp);
 		
 		System.out.println("Request is processed successfully.");
-		//Map data JSON response String into HistoricalPricingEventsData class using Jackson library
-		HistoricalPricingEventsData eventsData = new ObjectMapper().readerFor(HistoricalPricingEventsData.class)
+		//Map HistoricalPricingEventsData class with data JSON response using Jackson library
+		HistoricalPricingEvent eventsData = new ObjectMapper().readerFor( HistoricalPricingEvent.class)
 				                                                   .readValue(jsonResp);
-		//Get headers field(names and types) 
-		LinkedHashMap<String, String> headers = eventsData.getHeaders();
-		//Get data field
-		Vector<Vector<Object>> data = eventsData.getData();
-		
-		//If there is no data, exit from the method.
-		if(data.size()==0 || data==null) {
+		//check if JSON response contain status without data e.g. RIC is not found so exit from the method
+		if(eventsData.getStatus()!=null && eventsData.getData()==null ) {
+				JSONObject json = new JSONObject(jsonResp);
+				System.out.println("There is no data with status:");
+				System.out.println(json.toString(4));
+				return; 
+		}
+		//check if no data
+		else if(eventsData.getData().size()==0) {
 			System.out.println("No data is found.");
 			return;
 		}
-	
-		//To create all lines written in a csv file
+		//if there is data, perform the following
+		//the variable keeps lines written in CSV. 
+		List<String> lines = new ArrayList<String>();
 		//The variable to keep all field names
-		StringBuffer sbName = new StringBuffer();
-		//The variable to keep all field types
-		StringBuffer sbType = new StringBuffer();
-		//Each fields' definition
-		for (String fieldName: headers.keySet()){ 
-			//Add each field name following by "," to a String 
-			sbName.append(fieldName).append(",");
-			//Add each field type following by "," to a String 
-			sbType.append(headers.get(fieldName)).append(",");
-		}
+	  	StringBuffer sbName = new StringBuffer();
+	  	//The variable to keep all field types
+	  	StringBuffer sbType = new StringBuffer();
+	  	
+	    //get the value of data key
+	    List<List<String>> data =  (List<List<String>>)eventsData.getData();
+	    //print data
+	    //System.out.println(data);
+	    //add each event to the list
+	    Iterator<List<String>> oditerator = data.iterator();
+	    while(oditerator.hasNext()) {
+	    	 //[2019-06-14T15:58:21.315000000Z, quote, 9294, 31.21, 31.22,...]
+	    	 List<String> anEventinArray = (List<String>)oditerator.next();
+	    	 //2019-06-14T15:58:21.315000000Z, quote, 9294, 31.21, 31.22,...
+	    	 String anEvent = anEventinArray.toString().substring(1, anEventinArray.toString().length()-1);
+	    	//System.out.println(anEvent);
+	    	 lines.add(anEvent);
+	    }
+	    
+	    //Get the value of headers key 
+	  	List<Header> headers= eventsData.getHeaders();
+	  	//Get the value of name and type key in headers
+	  	Iterator<Header> hiterator = headers.iterator();
+	  	while(hiterator.hasNext()) {
+	  		Header aheader = (Header)hiterator.next();
+	  	    String name = aheader.getName();
+	  	    String type = aheader.getType();
+	  	    //System.out.println(name + "," + type);
+	  	    sbName.append(name).append(", ");
+	  	    sbType.append(type).append(", ");
+	  	}
 		//remove "," after the last field name
-		String fieldNameRow = sbName.substring(0, sbName.length() - 1);
+		String fieldNameRow = sbName.substring(0, sbName.length() - 2);
 		//remove "," after the last field type
-		String fieldTypeRow = sbType.substring(0, sbType.length() - 1);
-		Vector<String> lines = new Vector<String>();
-		//add the field name row and the field type row into the vector
-		lines.add(fieldNameRow);
-		lines.add(fieldTypeRow);
-		Iterator<Vector<Object>>  eventsIterator = data.iterator();
-		StringBuffer sbData = new StringBuffer();
-		//For each event in the data field
-		while (eventsIterator.hasNext()) { 
-	    	Vector<Object> anEvent = eventsIterator.next();
-	    	Iterator<Object> aValueIterator = anEvent.iterator(); 
-	    	//Add each field value(data) in the event into a String 
-	    	while (aValueIterator.hasNext()) { 
-	    		sbData.append(aValueIterator.next()).append(",");
-	        } 
-	    	//remove "," after the last field value
-			String aData = sbData.substring(0, sbData.length() - 1);
-			//Add the String containing all field values of an event 
-	    	lines.add(aData);
-	    	//clear StringBuffer keeping data for the next event
-	    	sbData.setLength(0);
-		}
+		String fieldTypeRow = sbType.substring(0, sbType.length() - 2);
+		
+		//add the field name row and the field type row into the List
+		lines.add(0,fieldNameRow);
+		lines.add(1,fieldTypeRow);
+		
 		//Create the name of the file which contains the RIC and current date time
 		String currentDataTime = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
 		outputFileName =  System.getProperty("user.dir") + File.separator + aRIC + "_" + currentDataTime;
@@ -189,8 +194,7 @@ public class HistoricalPricingEventsRequestor {
 		boolean success = Utils.writeAFile(outputFileName + ".csv",lines);
 		System.out.println(((success==true)?"Success":"Fail") + " writting data to the file - " +  outputFileName + ".csv");	 
     }
-    
-    //Get a token using EDPToken class
+        //Get a token using EDPToken class
     public static String getAccessToken() throws Exception{
     	sslsf = new SSLConnectionSocketFactory(new SSLContextBuilder().build());
     	httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
@@ -204,15 +208,8 @@ public class HistoricalPricingEventsRequestor {
 			//get an access token  
 			String access_token = getAccessToken();
 			
-			StringBuffer url = new StringBuffer("https://api.refinitiv.com/data/historical-pricing/"+HISTORICAL_PRICING_VERSION+ "/views/");
+			StringBuffer url = new StringBuffer("https://api.refinitiv.com/data/historical-pricing/"+HISTORICAL_PRICING_VERSION+ "/views/events/");
 			
-			//set the end point 
-			if(!singleEvent) 
-				//for historical pricing events data
-				url.append("events/");
-			else
-				//for a latest historical pricing event data
-				url.append("single-event/");
 			//Create the parameters url according to the input arguments
 			String paramReq = createParam();
 			StringBuffer urlReq = new StringBuffer("");
