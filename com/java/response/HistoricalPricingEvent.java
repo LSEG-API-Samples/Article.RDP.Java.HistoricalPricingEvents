@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -271,11 +270,6 @@ public class HistoricalPricingEvent {
     @JsonAnySetter
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("adjustments", adjustments).append("data", data).append("defaultPricingField", defaultPricingField).append("headers", headers).append("interval", interval).append("meta", meta).append("qos", qos).append("status", status).append("summaryTimestampLabel", summaryTimestampLabel).append("universe", universe).append("additionalProperties", additionalProperties).toString();
     }
 
     public enum SummaryTimestampLabel {

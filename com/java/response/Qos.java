@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 
 /**
@@ -64,11 +63,6 @@ public class Qos {
     @JsonAnySetter
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("timeliness", timeliness).append("additionalProperties", additionalProperties).toString();
     }
 
     public enum Timeliness {
