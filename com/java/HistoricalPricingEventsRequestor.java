@@ -127,7 +127,8 @@ public class HistoricalPricingEventsRequestor {
 		//System.out.println(jsonResp);
 		
 		System.out.println("Request is processed successfully.");
-		//Map HistoricalPricingEventsData class with data JSON response using Jackson library
+		//Jackson ObjectMapper reads HistoricalPricingEvents class and histocial pricing events JSON response 
+		//to create an object representing the parsed JSON.   
 		HistoricalPricingEvent eventsData = new ObjectMapper().readerFor( HistoricalPricingEvent.class)
 				                                                   .readValue(jsonResp);
 		//check if JSON response contain status without data e.g. RIC is not found so exit from the method
@@ -150,7 +151,7 @@ public class HistoricalPricingEventsRequestor {
 	  	//The variable to keep all field types
 	  	StringBuffer sbType = new StringBuffer();
 	  	
-	    //get the value of data key
+	    //get the values of data key in the object
 	    List<List<String>> data =  (List<List<String>>)eventsData.getData();
 	    //print data
 	    //System.out.println(data);
@@ -165,9 +166,9 @@ public class HistoricalPricingEventsRequestor {
 	    	 lines.add(anEvent);
 	    }
 	    
-	    //Get the value of headers key 
+	    //Get the values of headers key in the object 
 	  	List<Header> headers= eventsData.getHeaders();
-	  	//Get the value of name and type key in headers
+	  	//Get the values of name and type key in headers 
 	  	Iterator<Header> hiterator = headers.iterator();
 	  	while(hiterator.hasNext()) {
 	  		Header aheader = (Header)hiterator.next();
