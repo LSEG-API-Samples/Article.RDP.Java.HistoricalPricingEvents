@@ -195,11 +195,11 @@ public class HistoricalPricingEventsRequestor {
 		boolean success = Utils.writeAFile(outputFileName + ".csv",lines);
 		System.out.println(((success==true)?"Success":"Fail") + " writting data to the file - " +  outputFileName + ".csv");	 
     }
-        //Get a token using EDPToken class
+        //Get a token using RDPToken class
     public static String getAccessToken() throws Exception{
     	sslsf = new SSLConnectionSocketFactory(new SSLContextBuilder().build());
     	httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
-    	return EDPToken.getToken(username, clientId,false);
+    	return RDPToken.getToken(username, clientId,false);
     }
     
 	public static void main(String[] args) {
