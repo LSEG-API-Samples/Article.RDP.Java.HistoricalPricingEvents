@@ -1,3 +1,3 @@
-# Article.EDP.Java.HistoricalPricingEvents
-Created by Platform Services GitHub tool on Tue Jun 11 2019
-This application requires EDPToken.java and Utils.java which can be download from https://github.com/TR-API-Samples/Article.EDP.Java.EDPToken
+# Article.RDP.Java.HistoricalPricingEvents
+The full article is available at 
+This application requires RDPToken.java and Utils.java which can be download from [https://github.com/LSEG-Samples/Article.EDP.Java.EDPToken](https://github.com/LSEG-API-Samples/Article.RDP.Java.RDPToken)
