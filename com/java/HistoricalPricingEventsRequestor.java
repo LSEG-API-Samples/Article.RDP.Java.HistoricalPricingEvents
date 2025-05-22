@@ -127,7 +127,7 @@ public class HistoricalPricingEventsRequestor {
 		//System.out.println(jsonResp);
 		
 		System.out.println("Request is processed successfully.");
-		//Jackson ObjectMapper reads HistoricalPricingEvents class and histocial pricing events JSON response 
+		//Jackson ObjectMapper reads HistoricalPricingEvents class and historical pricing events JSON response 
 		//to create an object representing the parsed JSON.   
 		HistoricalPricingEvent eventsData = new ObjectMapper().readerFor( HistoricalPricingEvent.class)
 				                                                   .readValue(jsonResp);
@@ -152,14 +152,14 @@ public class HistoricalPricingEventsRequestor {
 	  	StringBuffer sbType = new StringBuffer();
 	  	
 	    //get the values of data key in the object
-	    List<List<String>> data =  (List<List<String>>)eventsData.getData();
+	    List<List<Object>> data =  (List<List<Object>>)eventsData.getData();
 	    //print data
 	    //System.out.println(data);
 	    //add each event to the list
-	    Iterator<List<String>> oditerator = data.iterator();
+	    Iterator<List<Object>> oditerator = data.iterator();
 	    while(oditerator.hasNext()) {
 	    	 //[2019-06-14T15:58:21.315000000Z, quote, 9294, 31.21, 31.22,...]
-	    	 List<String> anEventinArray = (List<String>)oditerator.next();
+	    	 List<Object> anEventinArray = (List<Object>)oditerator.next();
 	    	 //2019-06-14T15:58:21.315000000Z, quote, 9294, 31.21, 31.22,...
 	    	 String anEvent = anEventinArray.toString().substring(1, anEventinArray.toString().length()-1);
 	    	//System.out.println(anEvent);
