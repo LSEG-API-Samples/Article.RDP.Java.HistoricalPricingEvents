@@ -2,7 +2,9 @@
 package com.java.response;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -22,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 @JsonPropertyOrder({
     "timeliness"
 })
+@Generated("jsonschema2pojo")
 public class Qos {
 
     /**
@@ -33,7 +36,7 @@ public class Qos {
     @JsonPropertyDescription("Timeliness information")
     private Qos.Timeliness timeliness;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
     /**
      * Timeliness information
@@ -65,6 +68,12 @@ public class Qos {
         this.additionalProperties.put(name, value);
     }
 
+
+    /**
+     * Timeliness information
+     * 
+     */
+    @Generated("jsonschema2pojo")
     public enum Timeliness {
 
         DELAYED("delayed");
@@ -77,7 +86,7 @@ public class Qos {
             }
         }
 
-        private Timeliness(String value) {
+        Timeliness(String value) {
             this.value = value;
         }
 

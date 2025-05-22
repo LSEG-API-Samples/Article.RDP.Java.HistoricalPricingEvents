@@ -1,25 +1,36 @@
 
 package com.java.response;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "blendingEntry"
+    "blendingEntry",
+    "next"
 })
+@Generated("jsonschema2pojo")
 public class Meta {
 
     @JsonProperty("blendingEntry")
     private BlendingEntry blendingEntry;
+    /**
+     * The url for the next link.
+     * 
+     */
+    @JsonProperty("next")
+    @JsonPropertyDescription("The url for the next link.")
+    private String next;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
     @JsonProperty("blendingEntry")
     public BlendingEntry getBlendingEntry() {
@@ -29,6 +40,24 @@ public class Meta {
     @JsonProperty("blendingEntry")
     public void setBlendingEntry(BlendingEntry blendingEntry) {
         this.blendingEntry = blendingEntry;
+    }
+
+    /**
+     * The url for the next link.
+     * 
+     */
+    @JsonProperty("next")
+    public String getNext() {
+        return next;
+    }
+
+    /**
+     * The url for the next link.
+     * 
+     */
+    @JsonProperty("next")
+    public void setNext(String next) {
+        this.next = next;
     }
 
     @JsonAnyGetter

@@ -2,8 +2,10 @@
 package com.java.response;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -17,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "adjustments",
+    "chunks",
     "data",
     "defaultPricingField",
     "headers",
@@ -27,27 +30,35 @@ import com.fasterxml.jackson.annotation.JsonValue;
     "summaryTimestampLabel",
     "universe"
 })
+@Generated("jsonschema2pojo")
 public class HistoricalPricingEvent {
 
     /**
      * The list of adjustments types (comma delimiter) which the back-end applied to the returned historical time series data.
      * The supported values of adjustments
-     * * unadjusted - Not apply both exchange/manual corrections and CORAX
      * * exchangeCorrection - Apply exchange correction adjustment to historical pricing
      * * manualCorrection - Apply manual correction adjustment to historical pricing i.e. annotations made by content analysts
      * * CCH - Apply Capital Change adjustment to historical Pricing due to Corporate Actions e.g. stock split
      * * CRE - Apply Currency Redenomination adjustment when there is redenomination of currency
-     * * RPO - Apply Reuters Price Only adjustment to adjust historical price only not volume
-     * * RTS - Apply Reuters TimeSeries adjustment to adjust both historical price and volume
-     * * qualifiers - Apply price or volume adjustment to historical pricing according to trade/quote qualifier summarization actions e.g. noPrice, noVolume, noPriceAndVolume, noBid, noAsk, noBidAndAsk, outOfSessionIntraday, outOfSessionInterday. This adjustment is for events data only.
+     * * RPO - Apply Refinitiv Price Only adjustment to adjust historical price only not volume
+     * * RTS - Apply Refinitiv TimeSeries adjustment to adjust both historical price and volume
+     * * unadjusted - Not apply both exchange/manual corrections and CORAX
+     * * qualifiers - Apply price or volume adjustment to historical pricing according to trade/quote qualifier summarization actions e.g. noPrice, noVolume, noPriceAndVolume, noBid, noAsk, noBidAndAsk, outOfSequenceIntraday, outOfSequenceInterday. This adjustment is for events data only.
      * 
      * 
      */
     @JsonProperty("adjustments")
-    @JsonPropertyDescription("The list of adjustments types (comma delimiter) which the back-end applied to the returned historical time series data.\nThe supported values of adjustments\n* unadjusted - Not apply both exchange/manual corrections and CORAX\n* exchangeCorrection - Apply exchange correction adjustment to historical pricing\n* manualCorrection - Apply manual correction adjustment to historical pricing i.e. annotations made by content analysts\n* CCH - Apply Capital Change adjustment to historical Pricing due to Corporate Actions e.g. stock split\n* CRE - Apply Currency Redenomination adjustment when there is redenomination of currency\n* RPO - Apply Reuters Price Only adjustment to adjust historical price only not volume\n* RTS - Apply Reuters TimeSeries adjustment to adjust both historical price and volume\n* qualifiers - Apply price or volume adjustment to historical pricing according to trade/quote qualifier summarization actions e.g. noPrice, noVolume, noPriceAndVolume, noBid, noAsk, noBidAndAsk, outOfSessionIntraday, outOfSessionInterday. This adjustment is for events data only.\n")
-    private List<Adjustment> adjustments = null;
+    @JsonPropertyDescription("The list of adjustments types (comma delimiter) which the back-end applied to the returned historical time series data.\nThe supported values of adjustments\n* exchangeCorrection - Apply exchange correction adjustment to historical pricing\n* manualCorrection - Apply manual correction adjustment to historical pricing i.e. annotations made by content analysts\n* CCH - Apply Capital Change adjustment to historical Pricing due to Corporate Actions e.g. stock split\n* CRE - Apply Currency Redenomination adjustment when there is redenomination of currency\n* RPO - Apply Refinitiv Price Only adjustment to adjust historical price only not volume\n* RTS - Apply Refinitiv TimeSeries adjustment to adjust both historical price and volume\n* unadjusted - Not apply both exchange/manual corrections and CORAX\n* qualifiers - Apply price or volume adjustment to historical pricing according to trade/quote qualifier summarization actions e.g. noPrice, noVolume, noPriceAndVolume, noBid, noAsk, noBidAndAsk, outOfSequenceIntraday, outOfSequenceInterday. This adjustment is for events data only.\n")
+    private List<Adjustment> adjustments;
+    /**
+     * The chunk list to request chunk data
+     * 
+     */
+    @JsonProperty("chunks")
+    @JsonPropertyDescription("The chunk list to request chunk data")
+    private List<Chunk> chunks;
     @JsonProperty("data")
-    private List<List<String>> data = null;
+    private List<List<Object>> data;
     @JsonProperty("defaultPricingField")
     private String defaultPricingField;
     /**
@@ -56,7 +67,7 @@ public class HistoricalPricingEvent {
      */
     @JsonProperty("headers")
     @JsonPropertyDescription("The headers section of tabular respose")
-    private List<Header> headers = null;
+    private List<Header> headers;
     /**
      * The consolidation interval for summaries data only.
      * 
@@ -83,26 +94,27 @@ public class HistoricalPricingEvent {
     @JsonProperty("summaryTimestampLabel")
     private HistoricalPricingEvent.SummaryTimestampLabel summaryTimestampLabel;
     /**
-     * 
+     * The entity universe may contain RIC or PermID depending on your request
      * (Required)
      * 
      */
     @JsonProperty("universe")
+    @JsonPropertyDescription("The entity universe may contain RIC or PermID depending on your request")
     private Universe universe;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
     /**
      * The list of adjustments types (comma delimiter) which the back-end applied to the returned historical time series data.
      * The supported values of adjustments
-     * * unadjusted - Not apply both exchange/manual corrections and CORAX
      * * exchangeCorrection - Apply exchange correction adjustment to historical pricing
      * * manualCorrection - Apply manual correction adjustment to historical pricing i.e. annotations made by content analysts
      * * CCH - Apply Capital Change adjustment to historical Pricing due to Corporate Actions e.g. stock split
      * * CRE - Apply Currency Redenomination adjustment when there is redenomination of currency
-     * * RPO - Apply Reuters Price Only adjustment to adjust historical price only not volume
-     * * RTS - Apply Reuters TimeSeries adjustment to adjust both historical price and volume
-     * * qualifiers - Apply price or volume adjustment to historical pricing according to trade/quote qualifier summarization actions e.g. noPrice, noVolume, noPriceAndVolume, noBid, noAsk, noBidAndAsk, outOfSessionIntraday, outOfSessionInterday. This adjustment is for events data only.
+     * * RPO - Apply Refinitiv Price Only adjustment to adjust historical price only not volume
+     * * RTS - Apply Refinitiv TimeSeries adjustment to adjust both historical price and volume
+     * * unadjusted - Not apply both exchange/manual corrections and CORAX
+     * * qualifiers - Apply price or volume adjustment to historical pricing according to trade/quote qualifier summarization actions e.g. noPrice, noVolume, noPriceAndVolume, noBid, noAsk, noBidAndAsk, outOfSequenceIntraday, outOfSequenceInterday. This adjustment is for events data only.
      * 
      * 
      */
@@ -114,14 +126,14 @@ public class HistoricalPricingEvent {
     /**
      * The list of adjustments types (comma delimiter) which the back-end applied to the returned historical time series data.
      * The supported values of adjustments
-     * * unadjusted - Not apply both exchange/manual corrections and CORAX
      * * exchangeCorrection - Apply exchange correction adjustment to historical pricing
      * * manualCorrection - Apply manual correction adjustment to historical pricing i.e. annotations made by content analysts
      * * CCH - Apply Capital Change adjustment to historical Pricing due to Corporate Actions e.g. stock split
      * * CRE - Apply Currency Redenomination adjustment when there is redenomination of currency
-     * * RPO - Apply Reuters Price Only adjustment to adjust historical price only not volume
-     * * RTS - Apply Reuters TimeSeries adjustment to adjust both historical price and volume
-     * * qualifiers - Apply price or volume adjustment to historical pricing according to trade/quote qualifier summarization actions e.g. noPrice, noVolume, noPriceAndVolume, noBid, noAsk, noBidAndAsk, outOfSessionIntraday, outOfSessionInterday. This adjustment is for events data only.
+     * * RPO - Apply Refinitiv Price Only adjustment to adjust historical price only not volume
+     * * RTS - Apply Refinitiv TimeSeries adjustment to adjust both historical price and volume
+     * * unadjusted - Not apply both exchange/manual corrections and CORAX
+     * * qualifiers - Apply price or volume adjustment to historical pricing according to trade/quote qualifier summarization actions e.g. noPrice, noVolume, noPriceAndVolume, noBid, noAsk, noBidAndAsk, outOfSequenceIntraday, outOfSequenceInterday. This adjustment is for events data only.
      * 
      * 
      */
@@ -130,13 +142,31 @@ public class HistoricalPricingEvent {
         this.adjustments = adjustments;
     }
 
+    /**
+     * The chunk list to request chunk data
+     * 
+     */
+    @JsonProperty("chunks")
+    public List<Chunk> getChunks() {
+        return chunks;
+    }
+
+    /**
+     * The chunk list to request chunk data
+     * 
+     */
+    @JsonProperty("chunks")
+    public void setChunks(List<Chunk> chunks) {
+        this.chunks = chunks;
+    }
+
     @JsonProperty("data")
-    public List<List<String>> getData() {
+    public List<List<Object>> getData() {
         return data;
     }
 
     @JsonProperty("data")
-    public void setData(List<List<String>> data) {
+    public void setData(List<List<Object>> data) {
         this.data = data;
     }
 
@@ -243,7 +273,7 @@ public class HistoricalPricingEvent {
     }
 
     /**
-     * 
+     * The entity universe may contain RIC or PermID depending on your request
      * (Required)
      * 
      */
@@ -253,7 +283,7 @@ public class HistoricalPricingEvent {
     }
 
     /**
-     * 
+     * The entity universe may contain RIC or PermID depending on your request
      * (Required)
      * 
      */
@@ -272,6 +302,7 @@ public class HistoricalPricingEvent {
         this.additionalProperties.put(name, value);
     }
 
+    @Generated("jsonschema2pojo")
     public enum SummaryTimestampLabel {
 
         START_PERIOD("startPeriod"),
@@ -285,7 +316,7 @@ public class HistoricalPricingEvent {
             }
         }
 
-        private SummaryTimestampLabel(String value) {
+        SummaryTimestampLabel(String value) {
             this.value = value;
         }
 

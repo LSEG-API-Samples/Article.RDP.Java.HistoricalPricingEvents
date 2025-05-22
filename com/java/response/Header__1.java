@@ -20,43 +20,42 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "type"
 })
 @Generated("jsonschema2pojo")
-public class Header {
+public class Header__1 {
 
     /**
-     * The decimal character used for decimal number
+     * The decimal character used for decimal number.
      * 
      */
     @JsonProperty("decimalChar")
-    @JsonPropertyDescription("The decimal character used for decimal number")
+    @JsonPropertyDescription("The decimal character used for decimal number.")
     private String decimalChar;
     /**
-     * The boolean indicating an enumerated field
+     * The boolean indicates an enumerated field.
      * 
      */
     @JsonProperty("isEnum")
-    @JsonPropertyDescription("The boolean indicating an enumerated field")
+    @JsonPropertyDescription("The boolean indicates an enumerated field.")
     private Boolean isEnum;
     /**
-     * field name
+     * 
      * (Required)
      * 
      */
     @JsonProperty("name")
-    @JsonPropertyDescription("field name")
     private String name;
     /**
-     * Json data type i.e. string, number
+     * Json data type i.e. string, number.
      * (Required)
      * 
      */
     @JsonProperty("type")
-    @JsonPropertyDescription("Json data type i.e. string, number")
+    @JsonPropertyDescription("Json data type i.e. string, number.")
     private String type;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
     /**
-     * The decimal character used for decimal number
+     * The decimal character used for decimal number.
      * 
      */
     @JsonProperty("decimalChar")
@@ -65,7 +64,7 @@ public class Header {
     }
 
     /**
-     * The decimal character used for decimal number
+     * The decimal character used for decimal number.
      * 
      */
     @JsonProperty("decimalChar")
@@ -74,7 +73,7 @@ public class Header {
     }
 
     /**
-     * The boolean indicating an enumerated field
+     * The boolean indicates an enumerated field.
      * 
      */
     @JsonProperty("isEnum")
@@ -83,7 +82,7 @@ public class Header {
     }
 
     /**
-     * The boolean indicating an enumerated field
+     * The boolean indicates an enumerated field.
      * 
      */
     @JsonProperty("isEnum")
@@ -92,7 +91,7 @@ public class Header {
     }
 
     /**
-     * field name
+     * 
      * (Required)
      * 
      */
@@ -102,7 +101,7 @@ public class Header {
     }
 
     /**
-     * field name
+     * 
      * (Required)
      * 
      */
@@ -112,7 +111,7 @@ public class Header {
     }
 
     /**
-     * Json data type i.e. string, number
+     * Json data type i.e. string, number.
      * (Required)
      * 
      */
@@ -122,7 +121,7 @@ public class Header {
     }
 
     /**
-     * Json data type i.e. string, number
+     * Json data type i.e. string, number.
      * (Required)
      * 
      */

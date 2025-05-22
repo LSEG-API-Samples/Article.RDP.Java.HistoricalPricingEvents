@@ -3,18 +3,20 @@ package com.java.response;
 
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+@Generated("jsonschema2pojo")
 public enum Adjustment {
 
-    UNADJUSTED("unadjusted"),
     EXCHANGE_CORRECTION("exchangeCorrection"),
     MANUAL_CORRECTION("manualCorrection"),
     CCH("CCH"),
     CRE("CRE"),
     RPO("RPO"),
     RTS("RTS"),
+    UNADJUSTED("unadjusted"),
     QUALIFIERS("qualifiers");
     private final String value;
     private final static Map<String, Adjustment> CONSTANTS = new HashMap<String, Adjustment>();
@@ -25,7 +27,7 @@ public enum Adjustment {
         }
     }
 
-    private Adjustment(String value) {
+    Adjustment(String value) {
         this.value = value;
     }
 

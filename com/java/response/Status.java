@@ -1,8 +1,9 @@
 
 package com.java.response;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "code",
     "message"
 })
+@Generated("jsonschema2pojo")
 public class Status {
 
     /**
@@ -44,7 +46,7 @@ public class Status {
     @JsonPropertyDescription("A human-readable explanation/reason specific to this occurrence of the problem. This field's value can be localized.")
     private String message;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
     /**
      * Status code
